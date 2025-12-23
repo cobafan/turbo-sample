@@ -1,0 +1,11 @@
+<div class="container">
+  <h1>TODO Details</h1>
+
+  <%= turbo_frame_tag dom_id(@todo) do %>
+    <%= render @todo %>
+  <% end %>
+
+  <div class="actions">
+    <%= link_to "Back to TODOs", todos_path, class: "btn btn-secondary" %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<%= turbo_frame_tag dom_id(todo) do %>
+  <div class="todo-item <%= 'completed' if todo.completed? %>">
+    <div class="todo-content">
+      <div class="todo-checkbox">
+        <%= form_with(model: todo, url: toggle_todo_path(todo), method: :patch) do |form| %>
+          <%= form.check_box :completed,
+                             onchange: "this.form.requestSubmit()",
+                             checked: todo.completed? %>
+        <% end %>
+      </div>
+
+      <div class="todo-details">
+        <h3 class="todo-title"><%= todo.title %></h3>
+        <% if todo.description.present? %>
+          <p class="todo-description"><%= simple_format(todo.description) %></p>
+        <% end %>
+        <p class="todo-meta">
+          Created: <%= todo.created_at.strftime("%Y-%m-%d %H:%M") %>
+        </p>
+      </div>
+
+      <div class="todo-actions">
+        <%= link_to "Edit", edit_todo_path(todo), class: "btn btn-small btn-edit" %>
+        <%= button_to "Delete", todo_path(todo),
+                      method: :delete,
+                      class: "btn btn-small btn-danger",
+                      form: { data: { turbo_confirm: "Are you sure?" } } %>
+      </div>
+    </div>
+  </div>
+<% end %>

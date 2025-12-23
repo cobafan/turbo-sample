@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend "todos", @todo %>
+<%= turbo_stream.update "new_todo" do %>
+  <h2>Add New TODO</h2>
+  <%= render "form", todo: Todo.new %>
+<% end %>

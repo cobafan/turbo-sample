@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Turbo Sample TODO App</h1>
+
+  <div class="info-section">
+    <h2>Turbo Features Demo</h2>
+    <ul>
+      <li><strong>Turbo Drive:</strong> Navigate between pages without full page reload (automatic)</li>
+      <li><strong>Turbo Frames:</strong> Inline editing of TODOs (click "Edit" to see)</li>
+      <li><strong>Turbo Streams:</strong> Real-time updates when creating/updating/deleting TODOs</li>
+    </ul>
+  </div>
+
+  <%= turbo_frame_tag "new_todo" do %>
+    <h2>Add New TODO</h2>
+    <%= render "form", todo: Todo.new %>
+  <% end %>
+
+  <h2>TODO List</h2>
+
+  <%= turbo_stream_from "todos" %>
+
+  <div id="todos">
+    <%= render @todos %>
+  </div>
+
+  <% if @todos.empty? %>
+    <p class="empty-state">No todos yet. Create your first todo above!</p>
+  <% end %>
+</div>
