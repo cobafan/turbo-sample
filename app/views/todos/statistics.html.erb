@@ -1,0 +1,20 @@
+<%= turbo_frame_tag "statistics" do %>
+  <div class="statistics-content">
+    <div class="stat-item">
+      <span class="stat-label">Total TODOs:</span>
+      <span class="stat-value"><%= @total_count %></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Completed:</span>
+      <span class="stat-value stat-completed"><%= @completed_count %></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Pending:</span>
+      <span class="stat-value stat-pending"><%= @pending_count %></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Completion Rate:</span>
+      <span class="stat-value"><%= @completion_rate %>%</span>
+    </div>
+  </div>
+<% end %>

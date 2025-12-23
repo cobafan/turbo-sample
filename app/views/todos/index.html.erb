@@ -2,12 +2,24 @@
   <h1>Turbo Sample TODO App</h1>
 
   <div class="info-section">
-    <h2>Turbo Features Demo</h2>
+    <h2>Turbo Frames - Advanced Features Demo</h2>
     <ul>
-      <li><strong>Turbo Drive:</strong> Navigate between pages without full page reload (automatic)</li>
-      <li><strong>Turbo Frames:</strong> Inline editing of TODOs (click "Edit" to see)</li>
-      <li><strong>Turbo Streams:</strong> Real-time updates when creating/updating/deleting TODOs</li>
+      <li><strong>1. Lazy Loading:</strong> Statistics load automatically after page loads</li>
+      <li><strong>2. Filter Tabs:</strong> Switch between All/Pending/Completed without page reload</li>
+      <li><strong>3. Modal:</strong> Click "View" to see TODO details in a modal frame</li>
+      <li><strong>4. Nested Frames:</strong> Add comments inside the modal (frame within frame)</li>
+      <li><strong>5. Inline Editing:</strong> Click "Edit" to update TODOs inline</li>
     </ul>
+  </div>
+
+  <!-- Advanced Feature 1: Lazy Loading with Turbo Frame -->
+  <div class="statistics-section">
+    <h2>Statistics (Lazy Loaded)</h2>
+    <%= turbo_frame_tag "statistics", src: statistics_todos_path, loading: :lazy do %>
+      <div class="statistics-loading">
+        <p>📊 Loading statistics...</p>
+      </div>
+    <% end %>
   </div>
 
   <%= turbo_frame_tag "new_todo" do %>
@@ -15,7 +27,22 @@
     <%= render "form", todo: Todo.new %>
   <% end %>
 
+  <!-- Advanced Feature 2: Filter Tabs with Turbo Frame -->
   <h2>TODO List</h2>
+
+  <%= turbo_frame_tag "filter_tabs" do %>
+    <div class="filter-tabs">
+      <%= link_to "All (#{Todo.count})",
+                  filter_todos_path(filter: "all"),
+                  class: "filter-tab #{'active' if @filter == 'all'}" %>
+      <%= link_to "Pending (#{Todo.pending.count})",
+                  filter_todos_path(filter: "pending"),
+                  class: "filter-tab #{'active' if @filter == 'pending'}" %>
+      <%= link_to "Completed (#{Todo.completed.count})",
+                  filter_todos_path(filter: "completed"),
+                  class: "filter-tab #{'active' if @filter == 'completed'}" %>
+    </div>
+  <% end %>
 
   <%= turbo_stream_from "todos" %>
 
@@ -26,4 +53,7 @@
   <% if @todos.empty? %>
     <p class="empty-state">No todos yet. Create your first todo above!</p>
   <% end %>
+
+  <!-- Advanced Feature 3: Modal Frame (Target for TODO details) -->
+  <%= turbo_frame_tag "modal" %>
 </div>

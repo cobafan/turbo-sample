@@ -1,11 +1,39 @@
-<div class="container">
-  <h1>TODO Details</h1>
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal-backdrop" data-controller="modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>TODO Details</h2>
+        <%= link_to "Close", todos_path, class: "modal-close" %>
+      </div>
 
-  <%= turbo_frame_tag dom_id(@todo) do %>
-    <%= render @todo %>
-  <% end %>
+      <div class="modal-body">
+        <div class="todo-detail">
+          <h3 class="<%= 'completed' if @todo.completed? %>"><%= @todo.title %></h3>
+          <% if @todo.description.present? %>
+            <p class="todo-description"><%= simple_format(@todo.description) %></p>
+          <% end %>
+          <p class="todo-meta">
+            Status: <%= @todo.completed? ? "✅ Completed" : "⏳ Pending" %><br>
+            Created: <%= @todo.created_at.strftime("%Y-%m-%d %H:%M") %>
+          </p>
+        </div>
 
-  <div class="actions">
-    <%= link_to "Back to TODOs", todos_path, class: "btn btn-secondary" %>
+        <div class="comments-section">
+          <h3>Comments (<%= @todo.comments.count %>)</h3>
+
+          <%= turbo_frame_tag "comments_section_#{@todo.id}" do %>
+            <div id="comments_<%= @todo.id %>" class="comments-list">
+              <%= render @todo.comments %>
+            </div>
+
+            <%= render "comments/form", todo: @todo %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <%= link_to "Back to TODOs", todos_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
   </div>
-</div>
+<% end %>

@@ -1,0 +1,24 @@
+<%= turbo_stream.replace "todos" do %>
+  <div id="todos">
+    <%= render @todos %>
+  </div>
+<% end %>
+
+<%= turbo_stream.replace "filter_tabs" do %>
+  <%= turbo_frame_tag "filter_tabs" do %>
+    <div class="filter-tabs">
+      <%= link_to "All (#{Todo.count})",
+                  filter_todos_path(filter: "all"),
+                  class: "filter-tab #{'active' if @filter == 'all'}",
+                  data: { turbo_frame: "_top" } %>
+      <%= link_to "Pending (#{Todo.pending.count})",
+                  filter_todos_path(filter: "pending"),
+                  class: "filter-tab #{'active' if @filter == 'pending'}",
+                  data: { turbo_frame: "_top" } %>
+      <%= link_to "Completed (#{Todo.completed.count})",
+                  filter_todos_path(filter: "completed"),
+                  class: "filter-tab #{'active' if @filter == 'completed'}",
+                  data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>

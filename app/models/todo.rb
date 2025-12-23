@@ -1,4 +1,6 @@
 class Todo < ApplicationRecord
+  has_many :comments, dependent: :destroy
+
   validates :title, presence: true
 
   scope :ordered, -> { order(position: :asc, created_at: :desc) }

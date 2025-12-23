@@ -16,5 +16,10 @@ Rails.application.routes.draw do
     member do
       patch :toggle
     end
+    collection do
+      get :statistics
+      get :filter
+    end
+    resources :comments, only: [:create, :destroy]
   end
 end

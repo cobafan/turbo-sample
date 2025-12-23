@@ -3,6 +3,14 @@ class TodosController < ApplicationController
 
   def index
     @todos = Todo.ordered
+    @filter = params[:filter] || "all"
+
+    case @filter
+    when "completed"
+      @todos = @todos.completed
+    when "pending"
+      @todos = @todos.pending
+    end
   end
 
   def show
@@ -55,6 +63,37 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to todos_path }
+      format.turbo_stream
+    end
+  end
+
+  def statistics
+    sleep 1 # Simulate slow loading to demonstrate lazy loading
+
+    @total_count = Todo.count
+    @completed_count = Todo.completed.count
+    @pending_count = Todo.pending.count
+    @completion_rate = @total_count.zero? ? 0 : (@completed_count.to_f / @total_count * 100).round(1)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
+  end
+
+  def filter
+    @filter = params[:filter] || "all"
+    @todos = Todo.ordered
+
+    case @filter
+    when "completed"
+      @todos = @todos.completed
+    when "pending"
+      @todos = @todos.pending
+    end
+
+    respond_to do |format|
+      format.html { redirect_to todos_path(filter: @filter) }
       format.turbo_stream
     end
   end

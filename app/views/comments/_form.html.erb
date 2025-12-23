@@ -1,0 +1,13 @@
+<%= form_with(model: [todo, Comment.new], id: "new_comment_#{todo.id}") do |form| %>
+  <div class="comment-form">
+    <div class="field">
+      <%= form.text_field :author, placeholder: "Your name", required: true %>
+    </div>
+    <div class="field">
+      <%= form.text_area :content, rows: 3, placeholder: "Add a comment...", required: true %>
+    </div>
+    <div class="actions">
+      <%= form.submit "Add Comment", class: "btn btn-primary btn-small" %>
+    </div>
+  </div>
+<% end %>

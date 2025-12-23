@@ -1,0 +1,18 @@
+<%= turbo_frame_tag dom_id(comment) do %>
+  <div class="comment-item">
+    <div class="comment-header">
+      <strong><%= comment.author %></strong>
+      <span class="comment-time"><%= comment.created_at.strftime("%Y-%m-%d %H:%M") %></span>
+    </div>
+    <div class="comment-content">
+      <%= simple_format(comment.content) %>
+    </div>
+    <div class="comment-actions">
+      <%= button_to "Delete",
+                    todo_comment_path(comment.todo, comment),
+                    method: :delete,
+                    class: "btn btn-small btn-danger",
+                    form: { data: { turbo_confirm: "Delete this comment?" } } %>
+    </div>
+  </div>
+<% end %>
