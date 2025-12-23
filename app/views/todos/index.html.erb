@@ -31,17 +31,7 @@
   <h2>TODO List</h2>
 
   <%= turbo_frame_tag "filter_tabs" do %>
-    <div class="filter-tabs">
-      <%= link_to "All (#{Todo.count})",
-                  filter_todos_path(filter: "all"),
-                  class: "filter-tab #{'active' if @filter == 'all'}" %>
-      <%= link_to "Pending (#{Todo.pending.count})",
-                  filter_todos_path(filter: "pending"),
-                  class: "filter-tab #{'active' if @filter == 'pending'}" %>
-      <%= link_to "Completed (#{Todo.completed.count})",
-                  filter_todos_path(filter: "completed"),
-                  class: "filter-tab #{'active' if @filter == 'completed'}" %>
-    </div>
+    <%= render "filter_tabs" %>
   <% end %>
 
   <%= turbo_stream_from "todos" %>

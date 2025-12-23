@@ -1,1 +1,7 @@
 <%= turbo_stream.replace dom_id(@todo), @todo %>
+<%= turbo_stream.update "statistics" do %>
+  <%= render "statistics" %>
+<% end %>
+<%= turbo_stream.update "filter_tabs" do %>
+  <%= render "filter_tabs" %>
+<% end %>

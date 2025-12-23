@@ -100,16 +100,17 @@ TODOの詳細をモーダルで表示します。
 - 作成、更新、削除の操作が即座にUIに反映
 
 **実装箇所**:
-- `app/models/todo.rb:8` - `broadcasts_to`で自動ブロードキャスト
-- `app/views/todos/create.turbo_stream.erb` - TODO作成時の処理
+- `app/models/todo.rb:10` - `broadcasts_to`で自動ブロードキャスト
+- `app/views/todos/create.turbo_stream.erb` - TODO作成時の処理（TODOリスト、フォームクリア、統計、フィルタータブの4箇所を同時更新）
 - `app/views/todos/update.turbo_stream.erb` - TODO更新時の処理
-- `app/views/todos/destroy.turbo_stream.erb` - TODO削除時の処理
-- `app/views/todos/toggle.turbo_stream.erb` - 完了状態トグル時の処理
+- `app/views/todos/destroy.turbo_stream.erb` - TODO削除時の処理（TODO削除、統計、フィルタータブの3箇所を同時更新）
+- `app/views/todos/toggle.turbo_stream.erb` - 完了状態トグル時の処理（TODO更新、統計、フィルタータブの3箇所を同時更新）
 
 **使い方**:
 - TODOを作成すると、リストの先頭に自動的に追加される
 - チェックボックスをクリックすると、即座に完了状態が更新される
 - 削除ボタンをクリックすると、アニメーション付きで削除される
+- **TODO作成・削除・完了トグル時に統計情報とフィルタータブの件数も自動更新される**（複数のDOM要素を同時更新）
 
 ## セットアップ
 
@@ -165,7 +166,10 @@ bin/rails server
 
 3. **Turbo Streamsの活用**
    - TODOを作成・更新・削除して、リアルタイムに更新されることを確認
+   - TODOを作成すると、**TODOリスト・統計情報・フィルタータブの3箇所が同時に更新**される
+   - チェックボックスをトグルすると、**TODO・統計情報・フィルタータブが同時に更新**される
    - ブラウザの開発者ツールで、Turbo Streamのレスポンスを確認
+   - ネットワークタブで`text/vnd.turbo-stream.html`のレスポンスを見ると、複数の`<turbo-stream>`タグが含まれていることを確認
 
 ### 応用機能の学習
 
@@ -256,8 +260,27 @@ Turbo Framesは**同じID**を持つフレーム同士で内容を置き換え�
 | 例 | モーダル、インライン編集 | リスト追加、複数箇所の更新 |
 
 このアプリでは両方を併用しています：
-- **Turbo Frames**: モーダル表示、編集フォーム、タブ切り替え
-- **Turbo Streams**: TODO作成時のリスト更新とフォームクリア（2つの操作）
+- **Turbo Frames**: モーダル表示、編集フォーム、タブ切り替え、統計情報のLazy Loading
+- **Turbo Streams**: TODO作成時のリスト更新とフォームクリア・統計情報更新・フィルタータブ更新（4つの操作を同時実行）
+
+**複数DOM更新の実例**:
+
+TODO作成時の`create.turbo_stream.erb`では、4つの異なる場所を同時に更新：
+
+```erb
+<%= turbo_stream.prepend "todos", @todo %>          <!-- 1. TODOリストに追加 -->
+<%= turbo_stream.update "new_todo" do %>            <!-- 2. フォームをクリア -->
+  <%= render "form", todo: Todo.new %>
+<% end %>
+<%= turbo_stream.update "statistics" do %>          <!-- 3. 統計情報を更新 -->
+  <%= render "statistics" %>
+<% end %>
+<%= turbo_stream.update "filter_tabs" do %>         <!-- 4. フィルタータブの件数を更新 -->
+  <%= render "filter_tabs" %>
+<% end %>
+```
+
+これにより、1回のリクエストで複数の画面要素が同期して更新されます。
 
 ## 参考リンク
 

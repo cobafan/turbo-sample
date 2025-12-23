@@ -70,11 +70,6 @@ class TodosController < ApplicationController
   def statistics
     sleep 1 # Simulate slow loading to demonstrate lazy loading
 
-    @total_count = Todo.count
-    @completed_count = Todo.completed.count
-    @pending_count = Todo.pending.count
-    @completion_rate = @total_count.zero? ? 0 : (@completed_count.to_f / @total_count * 100).round(1)
-
     respond_to do |format|
       format.html
       format.turbo_stream

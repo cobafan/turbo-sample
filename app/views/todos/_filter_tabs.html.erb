@@ -1,0 +1,11 @@
+<div class="filter-tabs">
+  <%= link_to "All (#{Todo.count})",
+              filter_todos_path(filter: "all"),
+              class: "filter-tab #{'active' if @filter == 'all'}" %>
+  <%= link_to "Pending (#{Todo.pending.count})",
+              filter_todos_path(filter: "pending"),
+              class: "filter-tab #{'active' if @filter == 'pending'}" %>
+  <%= link_to "Completed (#{Todo.completed.count})",
+              filter_todos_path(filter: "completed"),
+              class: "filter-tab #{'active' if @filter == 'completed'}" %>
+</div>

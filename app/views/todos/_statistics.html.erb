@@ -1,0 +1,25 @@
+<%
+  total_count = Todo.count
+  completed_count = Todo.completed.count
+  pending_count = Todo.pending.count
+  completion_rate = total_count.zero? ? 0 : (completed_count.to_f / total_count * 100).round(1)
+%>
+
+<div class="statistics-content">
+  <div class="stat-item">
+    <span class="stat-label">Total TODOs:</span>
+    <span class="stat-value"><%= total_count %></span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Completed:</span>
+    <span class="stat-value stat-completed"><%= completed_count %></span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Pending:</span>
+    <span class="stat-value stat-pending"><%= pending_count %></span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-label">Completion Rate:</span>
+    <span class="stat-value"><%= completion_rate %>%</span>
+  </div>
+</div>

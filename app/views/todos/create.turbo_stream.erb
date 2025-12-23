@@ -3,3 +3,9 @@
   <h2>Add New TODO</h2>
   <%= render "form", todo: Todo.new %>
 <% end %>
+<%= turbo_stream.update "statistics" do %>
+  <%= render "statistics" %>
+<% end %>
+<%= turbo_stream.update "filter_tabs" do %>
+  <%= render "filter_tabs" %>
+<% end %>
